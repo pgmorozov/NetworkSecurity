@@ -467,7 +467,8 @@
       "apiVersion": "2021-04-01",
       "name": "LogicApps_scheduler",
       "dependsOn": [
-        "Networking_vNets"
+        "Networking_vNets",
+        "LogicApps_storageAccount"
       ],
       "properties": {
         "mode": "Incremental",
