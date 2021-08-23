@@ -18,7 +18,7 @@
         "customParameterValues": {},
         "parameterValues": {
           "storageaccount": "[tolower(parameters('resourceNames').storage)]",
-          "sharedkey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('resourceNames').storage), '2019-06-01').keys[0].value]"
+          "sharedkey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('resourceNames').storage)), '2019-06-01').keys[0].value]"
         },
         "api": {
           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
