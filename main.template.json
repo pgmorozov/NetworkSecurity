@@ -16,6 +16,7 @@
     },
     "filesLocation": {
       "type": "string"
+      "defaultValue":"https://raw.githubusercontent.com/pgmorozov/NetworkSecurity/main"
     },
     "resourceNamePrefix": {
       "type": "string"
@@ -55,7 +56,7 @@
     },
     "_sasToken": {
       "type": "secureString",
-      "defaultValue": null
+      "defaultValue": ""
     },
     "workspaceResourceGroup": {
       "type": "string"
