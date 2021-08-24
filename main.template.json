@@ -25,20 +25,32 @@
     "artifactsLocation": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/pgmorozov/NetworkSecurity/main"
+      "metadata": {
+        "description": "Path to the github repo or the storage account container"
+      }
     },
     "_sasToken": {
       "type": "secureString",
       "defaultValue": ""
     },
     "resourceNamePrefix": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "The name prefix and the name suffix should ensure the resource name uniqueness"
+      }
     },
     "resourceNameSuffix": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "The name prefix and the name suffix should ensure the resource name uniqueness"
+      }
     },
     "_resourceNames": {
       "type": "object",
-      "defaultValue": {}
+      "defaultValue": {},
+      "metadata": {
+        "description": "Predefined resource names. Should be set to default. The resourse names are generated using the prefix and the suffix. The value is passed when the template is integrated into a complex pipeline."
+      }
     },
     "win10VmIpAddress": {
       "type": "string",
@@ -57,18 +69,30 @@
       "defaultValue": "10.0.25.70"
     },
     "defaultUserName": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Builtin\\Administrator account's name for the Virtual Machines. This is not a domain account."
+      }
     },
     "defaultPassword": {
-      "type": "securestring"
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Builtin Administrator account."
+      }
     },
     "workspaceResourceGroup": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "",
+      "metadata": {
+        "description": "When provided, should point to a resource group where an existing Log Analytics workspace is deployed. When omitted, the deployment RG is used."
+      }
     },
     "workspaceName": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "",
+      "metadata": {
+        "description": "When provided, should point to an existing Log Analytics workspace. When omitted, a new Log Analytics workspace is deployed to the deployment RG with a name generated with the name affices"
+      }
     },
     "location": {
       "type": "string",
