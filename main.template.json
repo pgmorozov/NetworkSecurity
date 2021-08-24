@@ -15,8 +15,7 @@
       "defaultValue": true
     },
     "filesLocation": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/pgmorozov/NetworkSecurity/main"
+      "type": "string"
     },
     "resourceNamePrefix": {
       "type": "string"
@@ -49,7 +48,7 @@
       "defaultValue": "10.0.25.70"
     },
     "defaultUserName": {
-      "type": "securestring"
+      "type": "string"
     },
     "defaultPassword": {
       "type": "securestring"
@@ -59,15 +58,19 @@
       "defaultValue": ""
     },
     "workspaceResourceGroup": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": ""
     },
     "workspaceName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": ""
     }
   },
   "variables": {
-    "workspaceId": "[resourceId(parameters('workspaceResourceGroup'), 'microsoft.operationalinsights/workspaces', parameters('workspaceName'))]",
     "resourceNameSuffix": "[if(empty(parameters('resourceNameSuffix')), '', concat('-', parameters('resourceNameSuffix')))]",
+    "workspaceName": "[coalesce(parameters('workspaceName'), concat(parameters('resourceNamePrefix'), '-LA', variables('resourceNameSuffix')))]",
+    "workspaceResourceGroup": "[coalesce(parameters('workspaceResourceGroup'), resourceGroup().name)]",
+    "workspaceId": "[resourceId(variables('workspaceResourceGroup'), 'microsoft.operationalinsights/workspaces', variables('workspaceName'))]",
     "combinedResourceNames": {
       "nsg1": "[concat(parameters('resourceNamePrefix'), '-NSG1', variables('resourceNameSuffix'))]",
       "nsg2": "[concat(parameters('resourceNamePrefix'), '-NSG2', variables('resourceNameSuffix'))]",
@@ -111,8 +114,6 @@
       "bastion": "[concat(parameters('resourceNamePrefix'), '-NS-BASTION', variables('resourceNameSuffix'))]",
       "bastionIpAddress": "[concat(parameters('resourceNamePrefix'), '-NS-BASTION-PIP', variables('resourceNameSuffix'))]",
 
-      "logAnalyticsWs": "$(workspaceName)",
-      "logAnalyticsWsRGName": "$(workspaceResourceGroupName)",
       "tableConnection": "[concat(parameters('resourceNamePrefix'), '-tableconnection', variables('resourceNameSuffix'))]",
       "enableDdosProtectionApp": "[concat(parameters('resourceNamePrefix'), '-EnbleDDoSProtection', variables('resourceNameSuffix'))]",
       "disableDdosProtectionApp": "[concat(parameters('resourceNamePrefix'), '-DisableDDoSProtection', variables('resourceNameSuffix'))]",
@@ -484,6 +485,23 @@
       }
     },
     {
+      "type": "microsoft.operationalinsights/workspaces",
+      "apiVersion": "2020-10-01",
+      "name": "[variables('workspaceName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "sku": {
+          "name": "pergb2018"
+        },
+        "retentionInDays": 30,
+        "workspaceCapping": {
+          "dailyQuotaGb": -1
+        },
+        "publicNetworkAccessForIngestion": "Enabled",
+        "publicNetworkAccessForQuery": "Enabled"
+      }
+    },
+    {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "Monitoring_diagnosticSettings",
@@ -491,7 +509,8 @@
         "Networking_vNets",
         "WebApp_gateway",
         "WebApp_frontdoor",
-        "Networking_firewall"
+        "Networking_firewall",
+        "[variables('workspaceName')]"
       ],
       "properties": {
         "mode": "Incremental",
