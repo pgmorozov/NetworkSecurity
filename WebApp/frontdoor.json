@@ -125,7 +125,7 @@
           "isCompressionEnabled": false
         },
         "queryStringCachingBehavior": "NotSet",
-        "forwardingProtocol": "MatchRequest",
+        "forwardingProtocol": "HttpOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
         "enabledState": "Enabled"

@@ -64,14 +64,18 @@ jobs:
 
         New-AzResourceGroupDeployment -ResourceGroupName '$(RGName)' `
                                       -TemplateFile '$(Build.SourcesDirectory)/NetworkSecurity/main.template.json' `
-                                      -location '$(location)' `
-                                      -resourceNames $(resourceNames) `
-                                      -filesLocation "$($storage.Context.BlobEndPoint)template-files" `
-                                      -sasToken $tokenSecured `
-                                      -workspaceResourceGroup $(resourceNames).logAnalyticsWsRGName `
-                                      -workspaceName $(resourceNames).logAnalyticsWs `
-                                      -defaultUserName (ConvertTo-SecureString '$(defaultUserName)' -AsPlainText -Force) `
-                                      -defaultPassword (ConvertTo-SecureString '$(defaultPassword)' -AsPlainText -Force) `
+                                      -TemplateParameterObject @{
+                                        location = '$(location)'
+                                        _resourceNames = $(resourceNames)
+                                        resourceNamePrefix = ""
+                                        resourceNameSuffix = ""
+                                        artifactsLocation = "$($storage.Context.BlobEndPoint)template-files" 
+                                        _sasToken = $token 
+                                        workspaceResourceGroup = $(resourceNames).logAnalyticsWsRGName 
+                                        workspaceName = $(resourceNames).logAnalyticsWs 
+                                        defaultUserName = '$(defaultUserName)'
+                                        defaultPassword = '$(defaultPassword)'
+                                      } `
                                       -Verbose
 
   - task: AzurePowerShell@4
