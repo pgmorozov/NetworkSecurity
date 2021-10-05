@@ -2,6 +2,10 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "enableDdosProtection": {
+      "type": "bool",
+      "defaultValue": false
+    },
     "deployFirewall": {
       "type": "bool",
       "defaultValue": true
@@ -24,7 +28,6 @@
     },
     "artifactsLocation": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/pgmorozov/NetworkSecurity/main",
       "metadata": {
         "description": "Path to the github repo or the storage account container"
       }
@@ -214,6 +217,9 @@
         "parameters": {
           "resourceNames": {
             "value": "[variables('resourceNames')]"
+          },
+          "enableDdosProtection": {
+            "value": "[parameters('enableDdosProtection')]"
           },
           "location": {
             "value": "[parameters('location')]"
@@ -434,87 +440,6 @@
               "[variables('resourceNames').win2019Vm]",
               "[variables('resourceNames').win10Vm]"
             ]
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "LogicApps_storageAccount",
-      "dependsOn": [
-        "Networking_vNets"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('artifactsLocation'), '/LogicApps/storageAccount.json' , parameters('_sasToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "resourceNames": {
-            "value": "[variables('resourceNames')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "LogicApps_enable",
-      "dependsOn": [
-        "Networking_vNets"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('artifactsLocation'), '/LogicApps/enable.json' , parameters('_sasToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "resourceNames": {
-            "value": "[variables('resourceNames')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "LogicApps_disable",
-      "dependsOn": [
-        "Networking_vNets"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('artifactsLocation'), '/LogicApps/disable.json' , parameters('_sasToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "resourceNames": {
-            "value": "[variables('resourceNames')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "LogicApps_scheduler",
-      "dependsOn": [
-        "Networking_vNets",
-        "LogicApps_storageAccount"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('artifactsLocation'), '/LogicApps/scheduler.json' , parameters('_sasToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "resourceNames": {
-            "value": "[variables('resourceNames')]"
           }
         }
       }
