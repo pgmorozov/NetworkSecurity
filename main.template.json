@@ -197,6 +197,9 @@
           "resourceNames": {
             "value": "[variables('resourceNames')]"
           }
+          "enableDdosProtection": {
+            "value": "[parameters('enableDdosProtection')]"
+          },
         }
       }
     },
@@ -218,9 +221,6 @@
         "parameters": {
           "resourceNames": {
             "value": "[variables('resourceNames')]"
-          },
-          "enableDdosProtection": {
-            "value": "[parameters('enableDdosProtection')]"
           },
           "location": {
             "value": "[parameters('location')]"
